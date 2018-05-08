@@ -2,7 +2,7 @@ version: '3'
 
 services:
   db-mono:
-    image: asia.gcr.io/tugas-akhir-hana/mariadb-mono:latest
+    build: ./mariadb
     container_name: db-mono
     volumes:
       - container-volume:/var/lib/mysql
