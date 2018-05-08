@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  api-gateway:
+    build: .
+    container_name: api-gateway-mono
+    external_links:
+      - monolitich
+    ports:
+      - "8080:8080"
+    restart: always
+    networks:
+      - default
+      - app_default
+
+networks:
+  app_default:
+    external: true

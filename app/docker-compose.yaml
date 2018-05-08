@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  db-mono:
+    image: asia.gcr.io/tugas-akhir-hana/mariadb-mono:latest
+    container_name: db-mono
+    volumes:
+      - container-volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    restart: always
+
+  phpmyadmin-mono:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-mono
+    links:
+      - db-mono
+    ports:
+      - "8888:80"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      PMA_HOST: db-mono:3306
+    restart: always
+
+  monolitich:
+    build: .
+    container_name: monolitich
+    depends_on:
+      - db-mono
+    links:
+      - db-mono
+    external_links:
+      - traffic-streaming-service
+#    ports:
+#      - "50050:50050"
+    environment:
+      DB_HOST: "db-mono"
+      DB_PORT: "3306"
+      DB_NAME: "traffic_detection"
+      DB_ROOT_PASS: "root"
+    restart: always
+    networks:
+      - default
+      - traffic-streaming_default
+
+volumes:
+  container-volume:
+
+networks:
+  traffic-streaming_default:
+    external: true
