@@ -31,8 +31,8 @@ services:
       - db-mono
     external_links:
       - traffic-streaming-service
-#    ports:
-#      - "50050:50050"
+    # ports:
+    #  - "50000:50000"
     environment:
       DB_HOST: "db-mono"
       DB_PORT: "3306"

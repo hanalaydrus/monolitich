@@ -35,6 +35,8 @@ class GreeterServiceImpl final : public Greeter::Service {
         vector<boost::variant<int, string>> volumeResponse;
         string densityResponse;
         
+        cout << "request come, type: " << request->typeofservice() << ", id: " << request->id() << endl;
+
         if (request->typeofservice() == "volume"){
         	while (true) {
 	            volumeResponse = model.getVolumeDataByID(request->id());

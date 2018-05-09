@@ -24,6 +24,7 @@ import (
 	"net/http"
 	"log"
 	"io"
+	"encoding/json"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -83,17 +84,52 @@ func (s *server) SayHello(in *pbg.HelloRequest, stream pbg.Greeter_SayHelloServe
 	stream.SendHeader(metadata.Pairs("Pre-Response-Metadata", "Is-sent-as-headers-stream"))
 	ctx := stream.Context()
 	response := make(chan string)
-	go asClient(in.Typeofservice, in.Id, response, ctx)
+	responseVolume := make(chan string)
+	responseDensity := make(chan string)
+	responseSemantic := make(chan string)
+
+	log.Printf("request come, type: %s, id: %d", in.Typeofservice, in.Id)
+	if (in.Typeofservice == "all"){
+		go asClient("volume", in.Id, responseVolume, ctx)
+		go asClient("density", in.Id, responseDensity, ctx)
+		go asClient("semantic", in.Id, responseSemantic, ctx)
+	} else {
+		go asClient(in.Typeofservice, in.Id, response, ctx)
+	}
+	
 	for {
 		select{
 			case <- ctx.Done():
 				fmt.Println("close context")
 				return nil
 			default:
-				resp := <- response
-				helloReply := &pbg.HelloReply{Response: resp}
-				if err := stream.Send(helloReply); err != nil {
-					return err
+				if (in.Typeofservice == "all"){
+					type Message struct {
+						Volume string `json:"volume"`
+						Density string `json:"density"`
+						Semantic string `json:"semantic"`
+					}
+					respVolume := <- responseVolume
+					respDensity := <- responseDensity
+					respSemantic := <- responseSemantic
+
+					m := Message{Volume: respVolume, Density: respDensity, Semantic: respSemantic}
+					b, err := json.Marshal(m)
+					if err != nil {
+				        fmt.Printf("Error: %s", err)
+				        return err
+				    }
+
+					helloReply := &pbg.HelloReply{Response: string(b)}
+					if err := stream.Send(helloReply); err != nil {
+						return err
+					}
+				} else {
+					resp := <- response
+					helloReply := &pbg.HelloReply{Response: resp}
+					if err := stream.Send(helloReply); err != nil {
+						return err
+					}
 				}
 				// fmt.Println("response : ",resp)
 		}
