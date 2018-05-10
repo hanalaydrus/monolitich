@@ -88,8 +88,7 @@ func (s *server) SayHello(in *pbg.HelloRequest, stream pbg.Greeter_SayHelloServe
 	responseDensity := make(chan string)
 	responseSemantic := make(chan string)
 
-	log.Printf("request come, type: %s, id: %d", in.Typeofservice, in.Id)
-	if (in.Typeofservice == "all"){
+	if (strings.ToLower(in.Typeofservice) == "all"){
 		go asClient("volume", in.Id, responseVolume, ctx)
 		go asClient("density", in.Id, responseDensity, ctx)
 		go asClient("semantic", in.Id, responseSemantic, ctx)
@@ -103,7 +102,7 @@ func (s *server) SayHello(in *pbg.HelloRequest, stream pbg.Greeter_SayHelloServe
 				fmt.Println("close context")
 				return nil
 			default:
-				if (in.Typeofservice == "all"){
+				if (strings.ToLower(in.Typeofservice) == "all"){
 					type Message struct {
 						Volume string `json:"volume"`
 						Density string `json:"density"`
