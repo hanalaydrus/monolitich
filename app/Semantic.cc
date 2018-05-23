@@ -13,6 +13,14 @@
 Semantic::Semantic(){
 
 }
+
+int conccurrent = 0;
+
+string printTime(){
+    milliseconds ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+    return to_string(ms.count());
+}
+
 void counter(double duration){
 	duration = 0;
 	sleep(600000);
@@ -32,7 +40,15 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 	double duration;
 	thread tCounter (counter, duration);
 
-	for(;;){
+	// for logging
+    vector< vector<boost::variant<int, string>> > log;
+
+    int camera_id = request->id() % 10;
+    string Str = to_string(request->id());
+
+    conccurrent++;
+
+	for (int i = 0; i < 1000; ++i) {
 		cameraData = model.getCameraDataByID(camera_id);
 		densityData = model.getDensityDataByID(camera_id);
 		volumeData = model.getVolumeDataByID(camera_id);
@@ -87,10 +103,19 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		HelloReply r;
 		r.set_response(sentence);
 		writer->Write(r);
-
+		// logging
+        logs.push_back(Str);
+        logs.push_back(printTime());
+        logs.push_back(conccurrent);
+        
+        log.push_back(logs);
+        //
 		if (context->IsCancelled()){
 			tCounter.join();
 			break;
 		}
 	}
+	model.logging(log);
+    cout << "Finish check log cc: " << conccurrent << endl;
+    conccurrent--;
 }

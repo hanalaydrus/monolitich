@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 04, 2018 at 08:20 PM
+-- Generation Time: May 22, 2018 at 10:05 PM
 -- Server version: 5.7.21
 -- PHP Version: 7.1.14
 
@@ -90,6 +90,19 @@ CREATE TABLE `density_history` (
   `camera_id` int(20) NOT NULL,
   `density_state` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log`
+--
+
+CREATE TABLE `log` (
+  `id` int(20) NOT NULL,
+  `camera_id` varchar(5) NOT NULL,
+  `time` varchar(20) NOT NULL,
+  `concurrency` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -533,6 +546,12 @@ ALTER TABLE `density_history`
   ADD PRIMARY KEY (`density_history_id`);
 
 --
+-- Indexes for table `log`
+--
+ALTER TABLE `log`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `street_mask_points`
 --
 ALTER TABLE `street_mask_points`
@@ -577,6 +596,12 @@ ALTER TABLE `density_configuration`
 --
 ALTER TABLE `density_history`
   MODIFY `density_history_id` int(255) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `log`
+--
+ALTER TABLE `log`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `street_mask_points`

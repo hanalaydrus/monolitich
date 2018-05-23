@@ -1,5 +1,5 @@
 // main.cc
-
+#include <chrono>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -23,45 +23,90 @@ using gatewayContract::Greeter;
 #include "Density.h"
 #include "Semantic.h"
 
+using namespace std::chrono;
 using namespace std;
 
+/////////////////////////////////////////////////////////////////////////////////
+
+int conccurrent = 0;
+
+string printTime(){
+    milliseconds ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+    return to_string(ms.count());
+}
+
+/////////////////////////////////////////////////////////////////////////////////
 // Logic and data behind the server's behavior.
 class GreeterServiceImpl final : public Greeter::Service {
     Status SayHello(ServerContext* context,
                     const HelloRequest* request,
                     ServerWriter<HelloReply>* writer) override {
+
+        // for logging
+        int camera_id = request->id() % 10;
+        string Str = to_string(request->id());
+
+        //Handle Request
         HelloReply r;
         Model model;
         vector<boost::variant<int, string>> volumeResponse;
         string densityResponse;
         
-        cout << "request come, type: " << request->typeofservice() << ", id: " << request->id() << endl;
+        cout << "request come, type: " << request->typeofservice() << ", id: " << camera_id << endl;
 
         if (request->typeofservice() == "volume"){
-        	while (true) {
-	            volumeResponse = model.getVolumeDataByID(request->id());
+
+            vector< vector<boost::variant<int, string>> > log;
+            conccurrent++;
+
+        	for (int i = 0; i < 1000; ++i) {
+	            volumeResponse = model.getVolumeDataByID(camera_id);
 	            r.set_response(to_string(boost::get<int>(volumeResponse[1])));
 	            writer->Write(r);
-	            
+                // logging
+	            logs.push_back(Str);
+                logs.push_back(printTime());
+                logs.push_back(conccurrent);
+                
+                log.push_back(logs);
+                //
 	            if (context->IsCancelled()){
 	                break;
 	            }
 	        }
+            model.logging(log);
+            cout << "Finish check log cc: " << conccurrent << endl;
+            conccurrent--;
         } else if (request->typeofservice() == "density") {
-	        while (true) {
-				densityResponse = model.getDensityDataByID(request->id());
+
+            vector< vector<boost::variant<int, string>> > log;
+            conccurrent++;
+
+	        for (int i = 0; i < 1000; ++i) {
+				densityResponse = model.getDensityDataByID(camera_id);
 				r.set_response(densityResponse);
 				writer->Write(r);
-				
+				// logging
+                logs.push_back(Str);
+                logs.push_back(printTime());
+                logs.push_back(conccurrent);
+                
+                log.push_back(logs);
+                //
 				if (context->IsCancelled()){
 					break;
 				}
 			}
+            model.logging(log);
+            cout << "Finish check log cc: " << conccurrent << endl;
+            conccurrent--;
         } else {
-        	thread tRunSemantic(Semantic::runSemanticService, context, writer, request->id());
+        	thread tRunSemantic(Semantic::runSemanticService, context, writer, camera_id);
         	tRunSemantic.join();
         }
-	        
+
+        
+
         return Status::OK;
     }
 };

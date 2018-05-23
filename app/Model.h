@@ -54,6 +54,9 @@ public:
     // get weather [NEW]
     string getWeather(string latitude, string longitude);
     
+    // logging
+    void logging(vector< vector<boost::variant<int, string>> > log);
+    
 };
 
 #endif    // MY_MODEL
