@@ -104,18 +104,18 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		r.set_response(sentence);
 		writer->Write(r);
 		// logging
-        logs.push_back(Str);
-        logs.push_back(printTimeS());
-        logs.push_back(conccurrentSemantic);
+        // logs.push_back(Str);
+        // logs.push_back(printTimeS());
+        // logs.push_back(conccurrentSemantic);
         
-        log.push_back(logs);
+        // log.push_back(logs);
         //
 		if (context->IsCancelled()){
 			tCounter.join();
 			break;
 		}
 	}
-	model.logging(log);
-    cout << "Finish check log cc: " << conccurrentSemantic << endl;
-    conccurrentSemantic--;
+	// model.logging(log);
+    // cout << "Finish check log cc: " << conccurrentSemantic << endl;
+    // conccurrentSemantic--;
 }
