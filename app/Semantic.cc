@@ -16,10 +16,10 @@ Semantic::Semantic(){
 
 int conccurrentSemantic = 0;
 
-// string printTime(){
-//     milliseconds ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
-//     return to_string(ms.count());
-// }
+string printTimeS(){
+    milliseconds ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+    return to_string(ms.count());
+}
 
 void counter(double duration){
 	duration = 0;
@@ -105,7 +105,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		writer->Write(r);
 		// logging
         logs.push_back(Str);
-        logs.push_back(printTime());
+        logs.push_back(printTimeS());
         logs.push_back(conccurrentSemantic);
         
         log.push_back(logs);
