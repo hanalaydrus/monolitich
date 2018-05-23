@@ -103,7 +103,7 @@ class GreeterServiceImpl final : public Greeter::Service {
             cout << "Finish check log cc: " << conccurrent << endl;
             conccurrent--;
         } else {
-        	thread tRunSemantic(Semantic::runSemanticService, context, writer, camera_id);
+        	thread tRunSemantic(Semantic::runSemanticService, context, writer, request->id());
         	tRunSemantic.join();
         }
 

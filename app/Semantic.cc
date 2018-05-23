@@ -42,9 +42,8 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 
 	// for logging
     vector< vector<boost::variant<int, string>> > log;
-
-    int camera_id = request->id() % 10;
-    string Str = to_string(request->id());
+    string Str = to_string(camera_id);
+    camera_id = camera_id % 10;
 
     conccurrent++;
 
