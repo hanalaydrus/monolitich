@@ -46,8 +46,8 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
     camera_id = camera_id % 10;
 
     conccurrentSemantic++;
-
-	for (int i = 0; i < 1000; ++i) {
+    int i = 0;
+	for ( ; ; ) {
         vector<boost::variant<int, string>> logs;
 		cameraData = model.getCameraDataByID(camera_id);
 		densityData = model.getDensityDataByID(camera_id);
@@ -104,18 +104,23 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		r.set_response(sentence);
 		writer->Write(r);
 		// logging
-        // logs.push_back(Str);
-        // logs.push_back(printTimeS());
-        // logs.push_back(conccurrentSemantic);
+        logs.push_back(Str);
+        logs.push_back(printTimeS());
+        logs.push_back(conccurrentSemantic);
         
-        // log.push_back(logs);
+        log.push_back(logs);
+        i++;
+        if (i == 1000) {
+        	model.logging(log);
+		    cout << "Finish check log cc: " << conccurrentSemantic << endl;
+		    conccurrentSemantic--;
+        }
         //
 		if (context->IsCancelled()){
 			tCounter.join();
 			break;
 		}
 	}
-	// model.logging(log);
-    // cout << "Finish check log cc: " << conccurrentSemantic << endl;
-    // conccurrentSemantic--;
+	
+
 }
