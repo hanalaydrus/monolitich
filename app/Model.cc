@@ -522,9 +522,9 @@ void Model::logging(vector< vector<boost::variant<int, string>> > log) {
 
 			/* Create a connection */
 			driver = get_driver_instance();
-			con = driver->connect("tcp://db-volume:3306", "root", "root");
+			con = driver->connect("tcp://db-mono:3306", "root", "root");
 			/* Connect to the MySQL  database */
-			con->setSchema("volume");
+			con->setSchema("traffic_detection");
 			stmt = con->createStatement();
 			cout << "Currently inserting log ...." << endl;
 			cout << "size " << log.size() << endl;
