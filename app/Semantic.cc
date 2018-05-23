@@ -14,12 +14,12 @@ Semantic::Semantic(){
 
 }
 
-int conccurrent = 0;
+int conccurrentSemantic = 0;
 
-string printTime(){
-    milliseconds ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
-    return to_string(ms.count());
-}
+// string printTime(){
+//     milliseconds ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+//     return to_string(ms.count());
+// }
 
 void counter(double duration){
 	duration = 0;
@@ -45,7 +45,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
     string Str = to_string(camera_id);
     camera_id = camera_id % 10;
 
-    conccurrent++;
+    conccurrentSemantic++;
 
 	for (int i = 0; i < 1000; ++i) {
         vector<boost::variant<int, string>> logs;
@@ -106,7 +106,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		// logging
         logs.push_back(Str);
         logs.push_back(printTime());
-        logs.push_back(conccurrent);
+        logs.push_back(conccurrentSemantic);
         
         log.push_back(logs);
         //
@@ -116,6 +116,6 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		}
 	}
 	model.logging(log);
-    cout << "Finish check log cc: " << conccurrent << endl;
-    conccurrent--;
+    cout << "Finish check log cc: " << conccurrentSemantic << endl;
+    conccurrentSemantic--;
 }

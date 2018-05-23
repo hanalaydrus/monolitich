@@ -30,7 +30,8 @@ using namespace std;
 
 /////////////////////////////////////////////////////////////////////////////////
 
-int conccurrent = 0;
+int conccurrentVolume = 0;
+int conccurrentDensity = 0;
 
 string printTime(){
     milliseconds ms = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
@@ -59,7 +60,7 @@ class GreeterServiceImpl final : public Greeter::Service {
         if (request->typeofservice() == "volume"){
 
             vector< vector<boost::variant<int, string>> > log;
-            conccurrent++;
+            conccurrentVolume++;
 
         	for (int i = 0; i < 1000; ++i) {
                 vector<boost::variant<int, string>> logs;
@@ -70,7 +71,7 @@ class GreeterServiceImpl final : public Greeter::Service {
                 // logging
 	            logs.push_back(Str);
                 logs.push_back(printTime());
-                logs.push_back(conccurrent);
+                logs.push_back(conccurrentVolume);
                 
                 log.push_back(logs);
                 //
@@ -79,12 +80,12 @@ class GreeterServiceImpl final : public Greeter::Service {
 	            }
 	        }
             model.logging(log);
-            cout << "Finish check log cc: " << conccurrent << endl;
-            conccurrent--;
+            cout << "Finish check log cc: " << conccurrentVolume << endl;
+            conccurrentVolume--;
         } else if (request->typeofservice() == "density") {
 
             vector< vector<boost::variant<int, string>> > log;
-            conccurrent++;
+            conccurrentDensity++;
 
 	        for (int i = 0; i < 1000; ++i) {
                 vector<boost::variant<int, string>> logs;
@@ -95,7 +96,7 @@ class GreeterServiceImpl final : public Greeter::Service {
 				// logging
                 logs.push_back(Str);
                 logs.push_back(printTime());
-                logs.push_back(conccurrent);
+                logs.push_back(conccurrentDensity);
                 
                 log.push_back(logs);
                 //
@@ -104,14 +105,12 @@ class GreeterServiceImpl final : public Greeter::Service {
 				}
 			}
             model.logging(log);
-            cout << "Finish check log cc: " << conccurrent << endl;
-            conccurrent--;
+            cout << "Finish check log cc: " << conccurrentDensity << endl;
+            conccurrentDensity--;
         } else {
         	thread tRunSemantic(Semantic::runSemanticService, context, writer, request->id());
         	tRunSemantic.join();
         }
-
-        
 
         return Status::OK;
     }
