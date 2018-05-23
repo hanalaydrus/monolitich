@@ -62,6 +62,8 @@ class GreeterServiceImpl final : public Greeter::Service {
             conccurrent++;
 
         	for (int i = 0; i < 1000; ++i) {
+                vector<boost::variant<int, string>> logs;
+
 	            volumeResponse = model.getVolumeDataByID(camera_id);
 	            r.set_response(to_string(boost::get<int>(volumeResponse[1])));
 	            writer->Write(r);
@@ -85,6 +87,8 @@ class GreeterServiceImpl final : public Greeter::Service {
             conccurrent++;
 
 	        for (int i = 0; i < 1000; ++i) {
+                vector<boost::variant<int, string>> logs;
+
 				densityResponse = model.getDensityDataByID(camera_id);
 				r.set_response(densityResponse);
 				writer->Write(r);

@@ -48,6 +48,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
     conccurrent++;
 
 	for (int i = 0; i < 1000; ++i) {
+        vector<boost::variant<int, string>> logs;
 		cameraData = model.getCameraDataByID(camera_id);
 		densityData = model.getDensityDataByID(camera_id);
 		volumeData = model.getVolumeDataByID(camera_id);
