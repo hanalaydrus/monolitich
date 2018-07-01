@@ -29,6 +29,8 @@ services:
       - db-mono
     links:
       - db-mono
+    external_links:
+      - traffic-streaming-service
     # ports:
     #  - "50000:50000"
     environment:
@@ -39,6 +41,11 @@ services:
     restart: always
     networks:
       - default
+      - traffic-streaming_default
 
 volumes:
   container-volume:
+
+networks:
+  traffic-streaming_default:
+    external: true
