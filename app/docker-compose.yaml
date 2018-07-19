@@ -41,11 +41,11 @@ services:
     restart: always
     networks:
       - default
-      - traffic-streaming_default
+      # - traffic-streaming_default
 
 volumes:
   container-volume:
 
-networks:
-  traffic-streaming_default:
-    external: true
+# networks:
+#   traffic-streaming_default:
+#     external: true
