@@ -29,6 +29,8 @@ services:
       - db-mono
     links:
       - db-mono
+    # external_links:
+    #   - traffic-streaming-service
     # ports:
     #  - "50000:50000"
     environment:
@@ -37,8 +39,13 @@ services:
       DB_NAME: "traffic_detection"
       DB_ROOT_PASS: "root"
     restart: always
-    networks:
-      - default
+    # networks:
+    #   - default
+      # - traffic-streaming_default
 
 volumes:
   container-volume:
+
+# networks:
+#   traffic-streaming_default:
+#     external: true

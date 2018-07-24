@@ -41,12 +41,12 @@ CREATE TABLE `camera` (
 --
 
 INSERT INTO `camera` (`camera_id`, `url`, `street_name`, `latitude`, `longitude`) VALUES
-(1, 'http://35.198.201.38:5000/camera_1', 'Jalan Dago arah Dago Atas', '-6.879313', '107.616435'),
-(2, 'http://35.198.201.38:5000/camera_2', 'Jalan Ir.H.Djuanda depan SMAN 1 arah perempatan Dago Merdeka', '-6.895575', '107.612884'),
-(3, 'http://35.198.201.38:5000/camera_3', 'Jalan Ir.H.Djuanda depan KFC Dago arah Jalan Merdeka', '-6.901754', '107.611927'),
-(4, 'http://35.198.201.38:5000/camera_4', 'Jalan Ir.H.Djuanda depan KFC Dago arah perempatan Dago Merdeka', '-6.901741', '107.611819'),
-(5, 'http://35.198.201.38:5000/camera_5', 'Jalan Merdeka depan SDN 11 Banjarsari', '-6.913381', '107.610379'),
-(6, 'http://35.198.201.38:5000/camera_6', 'Jalan Pungkur depan ITC Kebon Kelapa', '-6.927415', '107.606491');
+(1, 'http://137.116.145.240:5000/camera_1', 'Jalan Dago arah Dago Atas', '-6.879313', '107.616435'),
+(2, 'http://137.116.145.240:5000/camera_2', 'Jalan Ir.H.Djuanda depan SMAN 1 arah perempatan Dago Merdeka', '-6.895575', '107.612884'),
+(3, 'http://137.116.145.240:5000/camera_3', 'Jalan Ir.H.Djuanda depan KFC Dago arah Jalan Merdeka', '-6.901754', '107.611927'),
+(4, 'http://137.116.145.240:5000/camera_4', 'Jalan Ir.H.Djuanda depan KFC Dago arah perempatan Dago Merdeka', '-6.901741', '107.611819'),
+(5, 'http://137.116.145.240:5000/camera_5', 'Jalan Merdeka depan SDN 11 Banjarsari', '-6.913381', '107.610379'),
+(6, 'http://137.116.145.240:5000/camera_6', 'Jalan Pungkur depan ITC Kebon Kelapa', '-6.927415', '107.606491');
 
 -- --------------------------------------------------------
 
