@@ -49,10 +49,12 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
     int i = 0;
 	for ( ; ; ) {
         vector<boost::variant<int, string>> logs;
+        string t1 = printTimeS();
 		cameraData = model.getCameraDataByID(camera_id);
 		densityData = model.getDensityDataByID(camera_id);
 		volumeData = model.getVolumeDataByID(camera_id);
 		percentageData = model.getPercentage(camera_id, boost::get<string>(volumeData[0]), boost::get<int>(volumeData[1]));
+		string t2 = printTimeS();
 		percentageDataConv = boost::lexical_cast<std::string>(round(percentageData));
 		if (duration == 600){
 			weatherData = model.getWeather(boost::get<string>(cameraData["latitude"]), boost::get<string>(cameraData["longitude"]));
@@ -105,6 +107,8 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		writer->Write(r);
 		// logging
         logs.push_back(Str);
+        logs.push_back(t1);
+        logs.push_back(t2);
         logs.push_back(printTimeS());
         logs.push_back(conccurrentSemantic);
         
