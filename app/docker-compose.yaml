@@ -29,23 +29,23 @@ services:
       - db-mono
     links:
       - db-mono
-    # external_links:
-    #   - traffic-streaming-service
-    # ports:
-    #  - "50000:50000"
+    external_links:
+      - traffic-streaming-service
+    ports:
+      - "50000:50000"
     environment:
       DB_HOST: "db-mono"
       DB_PORT: "3306"
       DB_NAME: "traffic_detection"
       DB_ROOT_PASS: "root"
     restart: always
-    # networks:
-    #   - default
-      # - traffic-streaming_default
+    networks:
+       - default
+       - traffic-streaming_default
 
 volumes:
   container-volume:
 
-# networks:
-#   traffic-streaming_default:
-#     external: true
+networks:
+  traffic-streaming_default:
+     external: true
