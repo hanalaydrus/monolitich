@@ -531,7 +531,7 @@ void Model::logging(vector< vector<boost::variant<int, string>> > log) {
 		  	for (int i = 0; i < log.size(); i++){
 		  		// cout << "insert log " << i << endl;
 	            ostringstream query;
-	            query << "INSERT INTO `log` (`camera_id`, `time`, `concurrency`) VALUES ('" << boost::get<string>(log[i][0]) << "', '" << boost::get<string>(log[i][1]) << "', " << boost::get<int>(log[i][2]) <<")";
+	            query << "INSERT INTO `log` (`camera_id`, `time1`, `time2`, `time3`, `concurrency`) VALUES ('" << boost::get<string>(log[i][0]) << "', '" << boost::get<string>(log[i][1]) << "','" << boost::get<string>(log[i][2]) << "','" << boost::get<string>(log[i][3])<< "', " << boost::get<int>(log[i][4]) <<")";
 	            stmt->execute(query.str());
         	}
 
