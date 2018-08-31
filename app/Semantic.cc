@@ -32,8 +32,9 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 	double duration;
 	thread tCounter (counter, duration);
 
+	cameraData = model.getCameraDataByID(camera_id);
+
 	for(;;){
-		cameraData = model.getCameraDataByID(camera_id);
 		densityData = model.getDensityDataByID(camera_id);
 		volumeData = model.getVolumeDataByID(camera_id);
 		percentageData = model.getPercentage(camera_id, boost::get<string>(volumeData[0]), boost::get<int>(volumeData[1]));
