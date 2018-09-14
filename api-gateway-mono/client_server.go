@@ -23,7 +23,6 @@ import (
 	"time"
 	"net/http"
 	"log"
-	"io"
 	"strings"
 	"encoding/json"
 	"sync"
@@ -33,7 +32,6 @@ import (
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/metadata"
 	"github.com/improbable-eng/grpc-web/go/grpcweb"
-	"google.golang.org/grpc/reflection"
 
 	pbg "api.gateway/gatewayContract"
 )
@@ -171,8 +169,6 @@ func asServer() {
 	port := 8080
 	s := grpc.NewServer()
 	pbg.RegisterGreeterServer(s, &server{})
-	// Register reflection service on gRPC server.
-	reflection.Register(s)
 
 	wrappedServer := grpcweb.WrapServer(s, grpcweb.WithCorsForRegisteredEndpointsOnly(false))
 	handler := func(resp http.ResponseWriter, req *http.Request) {
