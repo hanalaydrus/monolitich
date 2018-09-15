@@ -19,48 +19,48 @@ void counter(double duration){
 	duration = 600;
 }
 
-void getDensityData(Model model, int camera_id, string data, int exitFlag){
+void getDensityData(Model model, int camera_id, string data, int* exitFlag){
 	for(;;){
 		cout << "get density" << exitFlag << endl;
 		data = model.getDensityDataByID(camera_id);
-		if (exitFlag == 1) {
+		if (*exitFlag == 1) {
 			cout << "exit density" << endl;
 			break;
 		}
 	}
 }
 
-void getVolumeData(Model model, int camera_id, vector<boost::variant<int, string>> data, int exitFlag){
+void getVolumeData(Model model, int camera_id, vector<boost::variant<int, string>> data, int* exitFlag){
 	for(;;){
 		cout << "get volume" << exitFlag << endl;
 		data = model.getVolumeDataByID(camera_id);
-		if (exitFlag == 1) {
+		if (*exitFlag == 1) {
 			cout << "exit volume" << endl;
 			break;
 		}
 	}
 }
 
-void getPercentageData(Model model, int camera_id, vector<boost::variant<int, string>>volumeData, float data, int exitFlag){
+void getPercentageData(Model model, int camera_id, vector<boost::variant<int, string>>volumeData, float data, int* exitFlag){
 	for(;;){
 		cout << "get percentage" << exitFlag << endl;
 		if (!volumeData.empty()){
 			data = model.getPercentage(camera_id, boost::get<string>(volumeData[0]), boost::get<int>(volumeData[1]));
 		}
-		if (exitFlag == 1) {
+		if (*exitFlag == 1) {
 			cout << "exit percentage" << endl;
 			break;
 		}
 	}
 }
 
-void getWeatherData(Model model, map<string, boost::variant<int, string>> cameraData, string data, double duration, int exitFlag){
+void getWeatherData(Model model, map<string, boost::variant<int, string>> cameraData, string data, double duration, int* exitFlag){
 	for (;;){
 		cout << "get weather" << exitFlag << endl;
 		if (duration == 600 && !cameraData.empty()){
 			data = model.getWeather(boost::get<string>(cameraData["latitude"]), boost::get<string>(cameraData["longitude"]));
 		}
-		if (exitFlag == 1) {
+		if (*exitFlag == 1) {
 			cout << "exit weather" << endl;
 			break;
 		}
@@ -83,10 +83,10 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 
 	cameraData = model.getCameraDataByID(camera_id);
 
-	thread densityThread(getDensityData, model, camera_id, densityData, exitFlag);
-	thread volumeThread(getVolumeData, model, camera_id, volumeData, exitFlag);
-	thread percentageThread(getPercentageData, model, camera_id, volumeData, percentageData, exitFlag);
-	thread weatherThread(getWeatherData, model, cameraData, weatherData, duration, exitFlag);
+	thread densityThread(getDensityData, model, camera_id, densityData, &exitFlag);
+	thread volumeThread(getVolumeData, model, camera_id, volumeData, &exitFlag);
+	thread percentageThread(getPercentageData, model, camera_id, volumeData, percentageData, &exitFlag);
+	thread weatherThread(getWeatherData, model, cameraData, weatherData, duration, &exitFlag);
 
 	for(;;){
 		if ((weatherData.empty()) && (densityData.empty()) && (percentageData != percentageData)) {

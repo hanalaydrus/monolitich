@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <atomic>
 #include "boost/variant.hpp"
 #include "boost/lexical_cast.hpp"
 #include "gatewayContract.grpc.pb.h"
