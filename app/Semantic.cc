@@ -28,6 +28,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 	string percentageDataConv;
 	string weatherData;
 	string sentence;
+	bool exitFlag = false;
 
 	double duration;
 	thread tCounter (counter, duration);
@@ -35,6 +36,10 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 	cameraData = model.getCameraDataByID(camera_id);
 
 	for(;;){
+		if (exitFlag) {
+			cout << "done semantic " << camera_id << endl;
+			break;
+		}
 		densityData = model.getDensityDataByID(camera_id);
 		volumeData = model.getVolumeDataByID(camera_id);
 		percentageData = model.getPercentage(camera_id, boost::get<string>(volumeData[0]), boost::get<int>(volumeData[1]));
@@ -91,9 +96,8 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		writer->Write(r);
 
 		if (context->IsCancelled()){
+			exitFlag = true;
 			tCounter.join();
-			cout << "exit " << camera_id << endl;
-			break;
 		}
 	}
 }
