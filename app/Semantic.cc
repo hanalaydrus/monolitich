@@ -45,7 +45,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		transform(weatherData.begin(), weatherData.end(), weatherData.begin(), ::tolower);
 		size_t found = weatherData.find("hujan");
 		
-		if ((densityData.empty()) && (percentageData != percentageData)){
+		if ((densityData.empty()) && !(percentageData != percentageData)){
 			if (found!=std::string::npos){
 				if (percentageData > 0){
 					sentence = "Hujan mengguyur " + boost::get<string>(cameraData["street_name"]) + ". Terjadi kenaikan volume kendaraan sebesar " + percentageDataConv + " persen dibandingkan lalu lintas normal.";
@@ -69,7 +69,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 			} else {
 				sentence = boost::get<string>(cameraData["street_name"]) + " terpantau " + densityData + ".";
 			}
-		} else {
+		} else if ((!densityData.empty()) && !(percentageData != percentageData)) {
 			if (found!=std::string::npos) {
 				sentence = "Hujan mengguyur " + boost::get<string>(cameraData["street_name"]) + ". Arus lalu lintas terpantau " + densityData + ".";
 			} else {
@@ -83,6 +83,8 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 			} else {
 				sentence = sentence + " Terjadi penurunan volume kendaraan sebesar " + percentageDataConv + " persen dibandingkan lalu lintas normal.";
 			}
+		} else {
+			sentence = boost::get<string>(cameraData["street_name"]);
 		}
 
 		HelloReply r;

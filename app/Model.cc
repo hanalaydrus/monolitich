@@ -50,7 +50,7 @@ map<string, boost::variant<int, string>> Model::getCameraDataByID(int camera_id)
 		  	break;
 
 		} catch (sql::SQLException &e) {
-			cout << "# ERR: SQLException in " << __FILE__;
+			cout << "# ERR: SQLException in getCameraDataByID " << __FILE__;
 			cout << "# ERR: " << e.what();
 			cout << " (MySQL error code: " << e.getErrorCode();
 			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
@@ -139,7 +139,7 @@ vector<map<string, boost::variant<int, string, map<string, int> > > > Model::get
 		  	break;
 
 		} catch (sql::SQLException &e) {
-			cout << "# ERR: SQLException in " << __FILE__;
+			cout << "# ERR: SQLException in getAllDensityConfig " << __FILE__;
 			cout << "# ERR: " << e.what();
 			cout << " (MySQL error code: " << e.getErrorCode();
 			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
@@ -198,7 +198,7 @@ void Model::storeDensityData(int camera_id, string density_state) {
 		  	break;
 
 		} catch (sql::SQLException &e) {
-			cout << "# ERR: SQLException in " << __FILE__;
+			cout << "# ERR: SQLException in storeDensityData " << __FILE__;
 			cout << "# ERR: " << e.what();
 			cout << " (MySQL error code: " << e.getErrorCode();
 			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
@@ -240,7 +240,7 @@ string Model::getDensityDataByID(int camera_id) {
 
 		} catch (sql::SQLException &e) {
 	        response = "";
-			cout << "# ERR: SQLException in " << __FILE__;
+			cout << "# ERR: SQLException in getDensityDataByID " << __FILE__;
 			cout << "# ERR: " << e.what();
 			cout << " (MySQL error code: " << e.getErrorCode();
 			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
@@ -299,7 +299,7 @@ vector< map<string, boost::variant<int, string>> > Model::getAllVolumeConfig(){
 		  	break;
 
 		} catch (sql::SQLException &e) {
-			cout << "# ERR: SQLException in " << __FILE__;
+			cout << "# ERR: SQLException in getAllVolumeConfig " << __FILE__;
 			cout << "# ERR: " << e.what();
 			cout << " (MySQL error code: " << e.getErrorCode();
 			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
@@ -356,7 +356,7 @@ void Model::storeVolumeData(int camera_id, int volume_size) {
 			break;
 		  
 		} catch (sql::SQLException &e) {
-			cout << "# ERR: SQLException in " << __FILE__;
+			cout << "# ERR: SQLException in storeVolumeData " << __FILE__;
 			cout << "# ERR: " << e.what();
 			cout << " (MySQL error code: " << e.getErrorCode();
 			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
@@ -395,7 +395,7 @@ vector<boost::variant<int, string>> Model::getVolumeDataByID(int camera_id){
 			delete con;
 		  	break;
 		} catch (sql::SQLException &e) {
-			cout << "# ERR: SQLException in " << __FILE__;
+			cout << "# ERR: SQLException in getVolumeDataByID " << __FILE__;
 			cout << "# ERR: " << e.what();
 			cout << " (MySQL error code: " << e.getErrorCode();
 			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
@@ -435,7 +435,7 @@ float Model::getPercentage(int camera_id, string date_time, int volume_size){
 			delete con;
 		  	break;
 		} catch (sql::SQLException &e) {
-			cout << "# ERR: SQLException in " << __FILE__;
+			cout << "# ERR: SQLException in getPercentage " << __FILE__;
 			cout << "# ERR: " << e.what();
 			cout << " (MySQL error code: " << e.getErrorCode();
 			cout << ", SQLState: " << e.getSQLState() << " )" << endl;
