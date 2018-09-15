@@ -55,6 +55,7 @@ class GreeterServiceImpl final : public Greeter::Service {
 				writer->Write(r);
 				
 				if (context->IsCancelled()){
+                    cout << "done density" << endl;
 					break;
 				}
 			}

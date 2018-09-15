@@ -14,14 +14,19 @@ Semantic::Semantic(){
 
 }
 void counter(atomic<bool>& startRequest, atomic<bool>& exitFlag){
-	clock_t goal = 600000 + clock();
-	while (goal > clock()){
+	while(true){
 		if(exitFlag) {
 			break;
 		}
+		clock_t goal = (600000 * CLOCKS_PER_SEC/1000) + clock();
+		while (goal > clock()){
+			if(exitFlag) {
+				break;
+			}
 
+		}
+		startRequest = true;
 	}
-	startRequest = true;
 }
 
 void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloReply>* writer, int camera_id){
@@ -35,7 +40,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 	string sentence;
 	atomic<bool> startRequest{true};
 	atomic<bool> exitFlag{false};
-	thread tCounter;
+	thread tCounter(counter, ref(startRequest), ref(exitFlag));
 	
 	cameraData = model.getCameraDataByID(camera_id);
 
@@ -47,7 +52,6 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		if (startRequest){
 			weatherData = model.getWeather(boost::get<string>(cameraData["latitude"]), boost::get<string>(cameraData["longitude"]));
 			startRequest = false;
-			tCounter = thread(counter, ref(startRequest), ref(exitFlag));
 		}
 		transform(weatherData.begin(), weatherData.end(), weatherData.begin(), ::tolower);
 		size_t found = weatherData.find("hujan");

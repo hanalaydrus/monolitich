@@ -449,8 +449,8 @@ float Model::getPercentage(int camera_id, string date_time, int volume_size){
 
 // get weather [NEW]
 string Model::getWeather(string latitude, string longitude){
-	string response_string;
-	string weather;
+	string response_string, response_string2;
+	string weather = "";
 
     CURL *curl;
 	CURLcode res;
@@ -472,38 +472,49 @@ string Model::getWeather(string latitude, string longitude){
 			/* Check for errors */ 
 			if(res != CURLE_OK) {
 				fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-			 	continue;
+			 	break;
 			}
 
 			/* always cleanup */ 
 			curl_easy_cleanup(curl);
 		}
-
-		auto j = json::parse(response_string);
-		string locationKey = j["Key"];
-		url = "http://dataservice.accuweather.com/currentconditions/v1/"+ locationKey +"?apikey=zUAxVR88QcZr5j4hpl4IxMUnuxixTnfd&language=id-ID";
-
+		try {
+			auto j = json::parse(response_string);
+			string locationKey = j["Key"];
+			url = "http://dataservice.accuweather.com/currentconditions/v1/"+ locationKey +"?apikey=zUAxVR88QcZr5j4hpl4IxMUnuxixTnfd&language=id-ID";
+		} catch(json::parse_error) {
+			cout << "error parse 1" << endl;
+			break;
+		}
+		
+		curl = curl_easy_init();
 		if(curl) {
 			curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 			/* example.com is redirected, so we tell libcurl to follow redirection */ 
 			curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 			curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeFunction);
-			curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_string);
+			curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_string2);
 
 			/* Perform the request, res will get the return code */ 
 			res = curl_easy_perform(curl);
 			/* Check for errors */ 
 			if(res != CURLE_OK){
 			  	fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-			  	continue;
+			  	break;
 			}
 
 			/* always cleanup */ 
 			curl_easy_cleanup(curl);
 		}
 
-		j = json::parse(response_string);
-		weather = j[0]["WeatherText"];
+		try {
+			auto k = json::parse(response_string2);
+			weather = k[0]["WeatherText"];
+			
+		} catch(json::parse_error) {
+			cout << "error parse 2" << endl;
+		}
+
 		break;
 	}
 
