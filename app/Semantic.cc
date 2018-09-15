@@ -23,7 +23,7 @@ void getDensityData(Model model, int camera_id, string data, int exitFlag){
 	for(;;){
 		data = model.getDensityDataByID(camera_id);
 		if (exitFlag == 1) {
-			cout << "exit density" << camera_id << endl;
+			cout << "exit density" << endl;
 			break;
 		}
 	}
@@ -33,7 +33,7 @@ void getVolumeData(Model model, int camera_id, vector<boost::variant<int, string
 	for(;;){
 		data = model.getVolumeDataByID(camera_id);
 		if (exitFlag == 1) {
-			cout << "exit volume" << camera_id << endl;
+			cout << "exit volume" << endl;
 			break;
 		}
 	}
@@ -45,7 +45,7 @@ void getPercentageData(Model model, int camera_id, vector<boost::variant<int, st
 			data = model.getPercentage(camera_id, boost::get<string>(volumeData[0]), boost::get<int>(volumeData[1]));
 		}
 		if (exitFlag == 1) {
-			cout << "exit percentage" << camera_id << endl;
+			cout << "exit percentage" << endl;
 			break;
 		}
 	}
@@ -57,7 +57,7 @@ void getWeatherData(Model model, map<string, boost::variant<int, string>> camera
 			data = model.getWeather(boost::get<string>(cameraData["latitude"]), boost::get<string>(cameraData["longitude"]));
 		}
 		if (exitFlag == 1) {
-			cout << "exit weather" << camera_id << endl;
+			cout << "exit weather" << endl;
 			break;
 		}
 	}
