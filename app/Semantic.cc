@@ -13,10 +13,15 @@
 Semantic::Semantic(){
 
 }
-void counter(double duration){
-	duration = 0;
-	sleep(600000);
-	duration = 600;
+void counter(atomic<bool> * startRequest, atomic<bool> * exitFlag){
+	clock_t goal = 600000 + clock();
+	while (goal > clock()){
+		if(*exitFlag) {
+			break;
+		}
+
+	}
+	*startRequest = true;
 }
 
 void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloReply>* writer, int camera_id){
@@ -28,24 +33,21 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 	string percentageDataConv;
 	string weatherData;
 	string sentence;
-	bool exitFlag = false;
-
-	double duration;
-	thread tCounter (counter, duration);
-
+	atomic<bool> startRequest {true};
+	atomic<bool> exitFlag {false};
+	thread tCounter;
+	
 	cameraData = model.getCameraDataByID(camera_id);
 
 	for(;;){
-		if (exitFlag) {
-			cout << "done semantic " << camera_id << endl;
-			break;
-		}
 		densityData = model.getDensityDataByID(camera_id);
 		volumeData = model.getVolumeDataByID(camera_id);
 		percentageData = model.getPercentage(camera_id, boost::get<string>(volumeData[0]), boost::get<int>(volumeData[1]));
 		percentageDataConv = boost::lexical_cast<std::string>(round(percentageData));
-		if (duration == 600){
+		if (startRequest){
 			weatherData = model.getWeather(boost::get<string>(cameraData["latitude"]), boost::get<string>(cameraData["longitude"]));
+			startRequest = false;
+			tCounter = thread(counter, &startRequest, &exitFlag);
 		}
 		transform(weatherData.begin(), weatherData.end(), weatherData.begin(), ::tolower);
 		size_t found = weatherData.find("hujan");
@@ -98,6 +100,8 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		if (context->IsCancelled()){
 			exitFlag = true;
 			tCounter.join();
+			cout << "done semantic " << camera_id << endl;
+			break;
 		}
 	}
 }
