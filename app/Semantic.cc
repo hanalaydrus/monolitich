@@ -76,17 +76,19 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 	string percentageDataConv;
 	string weatherData;
 	string sentence;
-	int exitFlag = 0;
+	int * exitFlag;
+
+	*exitFlag = 0;
 
 	double duration;
 	thread tCounter (counter, duration);
 
 	cameraData = model.getCameraDataByID(camera_id);
 
-	thread densityThread(getDensityData, model, camera_id, densityData, &exitFlag);
-	thread volumeThread(getVolumeData, model, camera_id, volumeData, &exitFlag);
-	thread percentageThread(getPercentageData, model, camera_id, volumeData, percentageData, &exitFlag);
-	thread weatherThread(getWeatherData, model, cameraData, weatherData, duration, &exitFlag);
+	thread densityThread(getDensityData, model, camera_id, densityData, exitFlag);
+	thread volumeThread(getVolumeData, model, camera_id, volumeData, exitFlag);
+	thread percentageThread(getPercentageData, model, camera_id, volumeData, percentageData, exitFlag);
+	thread weatherThread(getWeatherData, model, cameraData, weatherData, duration, exitFlag);
 
 	for(;;){
 		if ((weatherData.empty()) && (densityData.empty()) && (percentageData != percentageData)) {
@@ -145,7 +147,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 
 		if (context->IsCancelled()){
 			cout << "exit " << camera_id << endl;
-			exitFlag = 1;
+			*exitFlag = 1;
 			tCounter.join();
 			densityThread.join();
 			volumeThread.join();
