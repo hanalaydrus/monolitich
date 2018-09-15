@@ -69,13 +69,12 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 			} else {
 				sentence = boost::get<string>(cameraData["street_name"]) + " terpantau " + densityData + ".";
 			}
-		} else if ((!densityData.empty()) && !(percentageData != percentageData)) {
+		} else if ((!densityData.empty()) && !(percentageData != percentageData)){
 			if (found!=std::string::npos) {
 				sentence = "Hujan mengguyur " + boost::get<string>(cameraData["street_name"]) + ". Arus lalu lintas terpantau " + densityData + ".";
 			} else {
 				sentence = boost::get<string>(cameraData["street_name"]) + " terpantau " + densityData + ".";
 			}
-
 			if (percentageData > 0){
 				sentence = sentence + " Terjadi kenaikan volume kendaraan sebesar " + percentageDataConv + " persen dibandingkan lalu lintas normal.";
 			} else if (percentageData == 0){
@@ -84,7 +83,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 				sentence = sentence + " Terjadi penurunan volume kendaraan sebesar " + percentageDataConv + " persen dibandingkan lalu lintas normal.";
 			}
 		} else {
-			sentence = boost::get<string>(cameraData["street_name"]);
+			sentence = boost::get<string>(cameraData["street_name"]) + ".";
 		}
 
 		HelloReply r;
@@ -93,6 +92,7 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 
 		if (context->IsCancelled()){
 			tCounter.join();
+			cout << "exit " << camera_id << endl;
 			break;
 		}
 	}
