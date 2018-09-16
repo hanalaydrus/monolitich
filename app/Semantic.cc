@@ -49,13 +49,14 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		volumeData = model.getVolumeDataByID(camera_id);
 		percentageData = model.getPercentage(camera_id, boost::get<string>(volumeData[0]), boost::get<int>(volumeData[1]));
 		percentageDataConv = boost::lexical_cast<std::string>(round(percentageData));
+
 		if (startRequest){
 			weatherData = model.getWeather(boost::get<string>(cameraData["latitude"]), boost::get<string>(cameraData["longitude"]));
 			startRequest = false;
 		}
+
 		transform(weatherData.begin(), weatherData.end(), weatherData.begin(), ::tolower);
 		size_t found = weatherData.find("hujan");
-		
 		if ((densityData.empty()) && !(percentageData != percentageData)){
 			if (found!=std::string::npos){
 				if (percentageData > 0){
@@ -96,7 +97,6 @@ void Semantic::runSemanticService(ServerContext* context, ServerWriter<HelloRepl
 		} else {
 			sentence = boost::get<string>(cameraData["street_name"]) + ".";
 		}
-
 		HelloReply r;
 		r.set_response(sentence);
 		writer->Write(r);

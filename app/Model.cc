@@ -459,7 +459,7 @@ string Model::getWeather(string latitude, string longitude){
 		curl = curl_easy_init();
 		string url = "http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=zUAxVR88QcZr5j4hpl4IxMUnuxixTnfd&q=";
 		url = url + latitude + "," + longitude;
-
+		
 		if(curl) {
 			curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 			/* example.com is redirected, so we tell libcurl to follow redirection */ 
@@ -478,12 +478,16 @@ string Model::getWeather(string latitude, string longitude){
 			/* always cleanup */ 
 			curl_easy_cleanup(curl);
 		}
+		
 		try {
 			auto j = json::parse(response_string);
 			string locationKey = j["Key"];
 			url = "http://dataservice.accuweather.com/currentconditions/v1/"+ locationKey +"?apikey=zUAxVR88QcZr5j4hpl4IxMUnuxixTnfd&language=id-ID";
 		} catch(json::parse_error) {
-			cout << "error parse 1" << endl;
+			cout << "error parse location key" << endl;
+			break;
+		} catch( const exception& e) {
+			cout << "error parse location key" << endl;
 			break;
 		}
 		
@@ -506,13 +510,16 @@ string Model::getWeather(string latitude, string longitude){
 			/* always cleanup */ 
 			curl_easy_cleanup(curl);
 		}
-
+		cout << "test 5" << endl;
 		try {
 			auto k = json::parse(response_string2);
 			weather = k[0]["WeatherText"];
 			
 		} catch(json::parse_error) {
-			cout << "error parse 2" << endl;
+			cout << "error parse weather data" << endl;
+		} catch( const exception& e) {
+			cout << "error parse weather data" << endl;
+			break;
 		}
 
 		break;
