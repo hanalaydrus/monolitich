@@ -36,4 +36,6 @@ message HelloRequest {
 // The response message containing the greetings
 message HelloReply {
   string response = 1;
+  string timestamp = 2;
+  float percentage = 3;
 }
