@@ -1,5 +1,5 @@
 // main.cc
-#include <chrono>
+
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -24,7 +24,6 @@ using gatewayContract::Greeter;
 #include "Semantic.h"
 
 using namespace std;
-using namespace std::chrono;
 
 // Logic and data behind the server's behavior.
 class GreeterServiceImpl final : public Greeter::Service {
@@ -36,28 +35,17 @@ class GreeterServiceImpl final : public Greeter::Service {
         vector<boost::variant<int, string>> volumeResponse;
         string densityResponse;
         float percentage;
-        milliseconds t1, t2, t3, t4, t5;
 
         if (request->typeofservice() == "volume"){
         	while (true) {
-                t1 = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
 	            volumeResponse = model.getVolumeDataByID(request->id());
-                t2 = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
-
-                t3 = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
                 percentage = model.getPercentage(request->id(), boost::get<string>(volumeResponse[0]), boost::get<int>(volumeResponse[1]));
-                t4 = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
                 
                 r.set_timestamp(boost::get<string>(volumeResponse[0]));
 	            r.set_response(to_string(boost::get<int>(volumeResponse[1])));
                 r.set_percentage(percentage);
 
 	            writer->Write(r);
-                t5 = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
-
-                cout << "get volume: " << to_string(t2.count() - t1.count()) << endl;
-                cout << "get percentage: " << to_string(t4.count() - t3.count()) << endl;
-                cout << "total: " << to_string(t5.count() - t1.count()) << endl;
 	            
 	            if (context->IsCancelled()){
                     cout << "done volume" << endl;
