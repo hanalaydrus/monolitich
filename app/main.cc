@@ -110,11 +110,11 @@ int main(void) {
         tRunVolumeService[i] = thread (
             Volume::runVolumeService, 
             index[i], 
-            boost::get<string>(volumeConfig[index[i]]["url"]),
-            boost::get<int>(volumeConfig[index[i]]["x0"]),
-            boost::get<int>(volumeConfig[index[i]]["y0"]),
-            boost::get<int>(volumeConfig[index[i]]["x1"]),
-            boost::get<int>(volumeConfig[index[i]]["y1"])
+            boost::get<string>(volumeConfig[99]["url"]),
+            boost::get<int>(volumeConfig[99]["x0"]),
+            boost::get<int>(volumeConfig[99]["y0"]),
+            boost::get<int>(volumeConfig[99]["x1"]),
+            boost::get<int>(volumeConfig[99]["y1"])
         );
     }
 
