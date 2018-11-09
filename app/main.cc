@@ -123,15 +123,15 @@ int main(void) {
 	for (int i = 0; i < densityConfig.size(); ++i){
 		tRunDensityService[i] = thread ( 
 			Density::runDensityService,
-			boost::get<int>(densityConfig[i]["camera_id"]),
-			boost::get<string>(densityConfig[i]["url"]),
-			boost::get<int>(densityConfig[i]["real_width"]),
-			boost::get<int>(densityConfig[i]["real_height"]),
+			boost::get<int>(densityConfig[99]["camera_id"]),
+			boost::get<string>(densityConfig[99]["url"]),
+			boost::get<int>(densityConfig[99]["real_width"]),
+			boost::get<int>(densityConfig[99]["real_height"]),
 			boost::get< map<string, int> >(densityConfig[i]["mask_points"]),
-			boost::get<int>(densityConfig[i]["edge_thresh"]),
-			boost::get<int>(densityConfig[i]["low_thresh"]),
-			boost::get<int>(densityConfig[i]["max_thresh"]),
-			boost::get<int>(densityConfig[i]["morph_iteration"])
+			boost::get<int>(densityConfig[99]["edge_thresh"]),
+			boost::get<int>(densityConfig[99]["low_thresh"]),
+			boost::get<int>(densityConfig[99]["max_thresh"]),
+			boost::get<int>(densityConfig[99]["morph_iteration"])
 		);
 	}
 
